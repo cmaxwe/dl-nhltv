@@ -13,10 +13,12 @@ URL for the json:
 http://statsapi.web.nhl.com/api/v1/schedule?expand=schedule.teams,schedule.linescore,schedule.scoringplays,schedule.game.content.media.epg&startDate=2016-02-10&endDate=2016-04-10&site=en_nhl&platform=playstation
 
 Dependencies:
-1. aria2c
-2. openssl
-3. python 2.7
-4. ffmpeg
+-aria2c
+-openssl
+-python 2.7
+-ffmpeg
 
 To run it you need to do something like this...
 python ./main.py
+
+When it runs it will check the nhl.tv servers for a new game for your team and if it finds it then it will download it. Then after it downloads it will do a loop and start looking for the next game.
