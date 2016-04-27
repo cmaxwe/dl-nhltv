@@ -22,7 +22,7 @@ def remove_lines_without_errors(errors):
 	download_file.close()
 
 def redo_broken_downloads(outFile):
-	DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=120 --max-file-not-found=20 --max-tries=20 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
+	DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
 
 	logFileName = outFile + '_download.log'
 
@@ -53,6 +53,8 @@ def redo_broken_downloads(outFile):
 				time.sleep(60 * 10)
 			remove_lines_without_errors(errors)
 			
+			tprint('Trying to download the erroneous files again...')
+			
 			# User aria2 to download the list
 			command = 'aria2c -i ./temp/download_file.txt -j 20 ' + DOWNLOAD_OPTIONS
 			p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
@@ -63,7 +65,7 @@ def redo_broken_downloads(outFile):
 
 
 def download_nhl(url, outFile):
-	DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=120 --max-file-not-found=20 --max-tries=20 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
+	DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
 	tprint("Starting Download: " + url)
 	
 	# Pull url_root
