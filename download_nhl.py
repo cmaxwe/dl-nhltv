@@ -1,9 +1,71 @@
 from globals import *
 
-def download_nhl(url, outFile):
-	tprint("Starting Download: " + url)
-	download_options = " --load-cookies=cookies.txt --log='download.log' --log-level=notice --quiet=true --retry-wait=120 --max-file-not-found=20 --max-tries=20 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true"
 
+def remove_lines_without_errors(errors):
+	# Open download file
+	download_file = open("./temp/download_file.txt", "r+")
+	download_file_lines = download_file.readlines()
+
+	download_file.seek(0)
+	writeNext = False
+	for line in download_file_lines:
+		for error in errors:
+			# For each error check to see if it is in the line
+			# If it is then write that line and the next one
+			if(error in line):
+				download_file.write(line)
+				writeNext = True
+			if(writeNext and 'out=temp/' in line):
+				download_file.write(line)
+				writeNext = False
+	download_file.truncate()
+	download_file.close()
+
+def redo_broken_downloads(outFile):
+	DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=120 --max-file-not-found=20 --max-tries=20 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true "
+
+	logFileName = outFile + '_download.log'
+
+	# Set counters
+	lastErrorCount = 0
+	lastLineNumber = 0
+
+	while(True):
+		# Loop through log file looking for errors
+		logFile = open(logFileName, "r")
+		startReading = False
+		errors = []
+		curLineNumber = 0
+		for line in logFile:
+			curLineNumber = curLineNumber + 1
+			if(curLineNumber > lastLineNumber):
+				# Is line an error?
+				if('[ERROR]' in line):
+					error_match = re.search(r'/.*K/(.*)',line, re.M|re.I).group(1)
+					errors.append(error_match)
+		lastLineNumber = curLineNumber
+		logFile.close()
+
+		if(len(errors) > 0):
+			tprint('Found ' + str(len(errors)) + ' download errors.')
+			if(lastErrorCount == len(errors)):
+				tprint('Same number of errrors as last time so waiting 10 minutes')
+				time.sleep(60 * 10)
+			remove_lines_without_errors(errors)
+			
+			# User aria2 to download the list
+			command = 'aria2c -i ./temp/download_file.txt -j 20 ' + DOWNLOAD_OPTIONS
+			p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
+			
+			lastErrorCount = len(errors)
+		else:
+			break
+
+
+def download_nhl(url, outFile):
+	DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=120 --max-file-not-found=20 --max-tries=20 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true "
+	tprint("Starting Download: " + url)
+	
 	# Pull url_root
 	url_root = re.match('(.*)master_tablet60.m3u8',url, re.M|re.I).group(1)
 
@@ -16,7 +78,7 @@ def download_nhl(url, outFile):
 	subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()	
 	
 	# Get the master m3u8
-	command = 'aria2c -o temp/master.m3u8' + download_options + url
+	command = 'aria2c -o temp/master.m3u8' + DOWNLOAD_OPTIONS + url
 	subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
 
 	# Parse the master and get the quality URL
@@ -29,7 +91,7 @@ def download_nhl(url, outFile):
 			quality_url = url_root + line
 
 	# Get the m3u8 for the quality
-	command = 'aria2c -o temp/input.m3u8' + download_options + quality_url
+	command = 'aria2c -o temp/input.m3u8' + DOWNLOAD_OPTIONS + quality_url
 	subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
 
 	# Parse m3u8 
@@ -80,8 +142,11 @@ def download_nhl(url, outFile):
 	download_file.close()
 
 	# User aria2 to download the list
-	command = 'aria2c -i ./temp/download_file.txt -j 20 ' + download_options
+	command = 'aria2c -i ./temp/download_file.txt -j 20 ' + DOWNLOAD_OPTIONS
 	p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
+
+	# Repair broken downloads if necessary
+	redo_broken_downloads(outFile)
 
 	# Create the concat file
 	concat_file = open("./temp/concat.txt", "w")
@@ -125,7 +190,3 @@ def download_nhl(url, outFile):
 	subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
 
 	return
-
-
-
-
