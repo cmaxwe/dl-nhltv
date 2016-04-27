@@ -389,9 +389,9 @@ while(True):
     saveCookiesAsText()
 
     # Wait 15 minutes for it to propagate
-    waitTime = 60 * 20
-    tprint("Game ready! Waiting for " + str(waitTime/60) + ' minutes for it to finish propagating.')
-    time.sleep(waitTime)
+    #waitTime = 60 * 20
+    #tprint("Game ready! Waiting for " + str(waitTime/60) + ' minutes for it to finish propagating.')
+    #time.sleep(waitTime)
 
     # Download stream_url
     outputFile = str(gameID) + '_raw.mkv'
