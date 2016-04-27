@@ -2,7 +2,7 @@ from globals import *
 
 def download_nhl(url, outFile):
 	tprint("Starting Download: " + url)
-	download_options = " --load-cookies=cookies.txt --log='download.log' --log-level=notice --quiet=true --retry-wait=120 "
+	download_options = " --load-cookies=cookies.txt --log='download.log' --log-level=notice --quiet=true --retry-wait=120 --max-file-not-found=20 --max-tries=20 --header='Accept: */*' --header='Accept-Encoding: gzip, deflate' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true"
 
 	# Pull url_root
 	url_root = re.match('(.*)master_tablet60.m3u8',url, re.M|re.I).group(1)
@@ -80,7 +80,7 @@ def download_nhl(url, outFile):
 	download_file.close()
 
 	# User aria2 to download the list
-	command = 'aria2c -i ./temp/download_file.txt -j 10 ' + download_options
+	command = 'aria2c -i ./temp/download_file.txt -j 20 ' + download_options
 	p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
 
 	# Create the concat file
