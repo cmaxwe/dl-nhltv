@@ -1,6 +1,11 @@
 from globals import *
 from silenceskip import silenceSkip
 from download_nhl import download_nhl
+from datetime import timedelta
+import urllib2
+import urllib
+import time
+
 
 def createFullGameStream(stream_url, media_auth):
     #SD (800 kbps)|SD (1600 kbps)|HD (3000 kbps)|HD (5000 kbps)        
@@ -38,7 +43,7 @@ def getAuthCookie():
     return authorization
 
 
-def fetchStream(game_id, content_id,event_id):        
+def fetchStream(game_id, content_id, event_id):        
     stream_url = ''
     media_auth = ''    
    
@@ -51,16 +56,23 @@ def fetchStream(game_id, content_id,event_id):
             return stream_url, media_auth
 
     cj = cookielib.LWPCookieJar('cookies.lwp') 
-    cj.load('cookies.lwp',ignore_discard=True)         
+    cj.load('cookies.lwp',ignore_discard=True) 
+    
+    tprint("Fetching session_key")        
     session_key = getSessionKey(game_id,event_id,content_id,authorization)    
     opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))   
         
-
+    tprint("Checking session key")
     if session_key == '':
         return stream_url, media_auth
+
     elif session_key == 'blackout':
         msg = "The game you are trying to access is not currently available due to local or national blackout restrictions.\n Full game archives will be available 48 hours after completion of this game."
         tprint(msg)
+        return stream_url, media_auth
+
+    elif session_key == 'error':
+        tprint("some unknown error")
         return stream_url, media_auth
 
     #Org
@@ -77,8 +89,13 @@ def fetchStream(game_id, content_id,event_id):
     response = opener.open(req)
     json_source = json.load(response)       
     response.close()
-       
 
+    # Expecting - values to always be bad i.e.: -3500 is Sign-on restriction: Too many usage attempts
+    if json_source['status_code'] < 0:
+        tprint(json_source['status_message'])
+        # can't handle this at the moment lest get out of here
+        return 'error'
+       
     if json_source['status_code'] == 1:
         if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
             msg = "You do not have access to view this content. To watch live games and learn more about blackout restrictions, please visit NHL.TV"
@@ -87,13 +104,17 @@ def fetchStream(game_id, content_id,event_id):
             stream_url = json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']    
             media_auth = str(json_source['session_info']['sessionAttributes'][0]['attributeName']) + "=" + str(json_source['session_info']['sessionAttributes'][0]['attributeValue'])
             session_key = json_source['session_key']
-            setSetting(id='media_auth', value=media_auth) 
+            setSetting(sid='media_auth', value=media_auth) 
             #Update Session Key
-            setSetting(id='session_key', value=session_key)   
+            setSetting(sid='session_key', value=session_key)   
     else:
         msg = json_source['status_message']
         tprint(msg)     
     
+    # Pulling out game_info in formated like "2017-03-06_VAN-ANA" for file name prefix
+    game_info = getGameInfo(json_source)
+    tprint("game info=" + game_info)
+
     # Add media_auth cookie
     ck = cookielib.Cookie(version=0, name='mediaAuth', value="" + media_auth.replace('mediaAuth=','') + "", port=None, port_specified=False, domain='.nhl.com', domain_specified=True, domain_initial_dot=True, path='/', path_specified=True, secure=False, expires=(int(time.time()) + 7500), discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)
     cj = cookielib.LWPCookieJar('cookies.lwp')
@@ -101,16 +122,33 @@ def fetchStream(game_id, content_id,event_id):
     cj.set_cookie(ck)
     cj.save(ignore_discard=False)
 
-    return stream_url, media_auth    
-   
+    return stream_url, media_auth, game_info    
 
+def getGameInfo(json_source=json):
+    """
+    ==================================================
+    Game info for file prefix like 2017-03-06_VAN-ANA 
+    ==================================================
+    
+    Arguments:
+        json_source (json): The first parameter.
 
+    Returns:
+        str: game info string like 2017-03-06_VAN-ANA
+    """
+    
+    game_info = json_source['user_verified_event'][0]['user_verified_content'][0]['name'].replace(":","|") 
+    game_time, game_teams, _ = game_info.split(" | ")
+    game_teams = game_teams.split()[0] + "-" + game_teams.split()[2]
+    return game_time + "_" + game_teams 
+    
 
 def getSessionKey(game_id,event_id,content_id,authorization):    
-    #session_key = ''
-    session_key = str(getSetting(id="session_key"))
 
-    if session_key == '':        
+    session_key = str(getSetting(sid="session_key"))
+
+    if session_key == '':
+        tprint("need to fetch new session key")
         epoch_time_now = str(int(round(time.time()*1000)))    
 
         url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream?eventId='+event_id+'&format=json&platform=WEB_MEDIAPLAYER&subject=NHLTV&_='+epoch_time_now        
@@ -127,19 +165,23 @@ def getSessionKey(game_id,event_id,content_id,authorization):
         response = urllib2.urlopen(req)
         json_source = json.load(response)   
         response.close()
-        
+        tprint("status_code" + str(json_source['status_code']) )
+        # Expecting - values to always be bad i.e.: -3500 is Sign-on restriction: Too many usage attempts
+        if json_source['status_code'] < 0:
+            tprint(json_source['status_message'])
+            # can't handle this at the moment lest get out of here
+            return 'error'
+
         tprint("REQUESTED SESSION KEY")
+
         if json_source['status_code'] == 1:      
             if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
                 msg = "You do not have access to view this content. To watch live games and learn more about blackout restrictions, please visit NHL.TV"
                 tprint(msg)
-                session_key = 'blackout'
-            else:    
-                session_key = str(json_source['session_key'])
-                setSetting(id='session_key', value=session_key)                              
-        else:
-            msg = json_source['status_message']
-            tprint(msg)      
+                return 'blackout'
+        session_key = str(json_source['session_key'])
+        setSetting(sid='session_key', value=session_key)                              
+
     return session_key  
     
 
@@ -236,7 +278,7 @@ def logout(display_msg=None):
     response.close()
 
     if display_msg == 'true':
-        setSetting(id='session_key', value='') 
+        setSetting(sid='session_key', value='') 
 
 def getGameId():
     current_time = datetime.now()
@@ -330,7 +372,7 @@ def downloadStream(stream_url, outputFile):
     
     outfile = open(outputFile + '.log', 'w')
     for line in pi:
-    	outfile.write(line)
+        outfile.write(line)
         if('Fetching master m3u8 file' in line):
             file = re.search(r'.*/NHL_GAME_VIDEO_(.*)/.*',line, re.M|re.I)
             downloadFile = 'NHL_GAME_VIDEO_' + file.group(1) + '.mp4'
@@ -385,7 +427,7 @@ while(True):
 
     # When one is found then fetch the stream and save the cookies for it
     tprint('Fetching the stream URL')
-    stream_url, media_auth = fetchStream(gameID, contentID, eventID)
+    stream_url, media_auth, game_info = fetchStream(gameID, contentID, eventID)
     saveCookiesAsText()
 
     # Wait 15 minutes for it to propagate
@@ -402,12 +444,11 @@ while(True):
 
     #Remove silence
     tprint("Removing silence...")
-    newFileName = str(gameID) + '.mkv'
+    newFileName = DOWNLOAD_FOLDER + game_info + "_" + str(gameID) + '.mkv'
     silenceSkip(outputFile, newFileName)
 
     # Uncomment to enable re-encoding
     #Re-encoding for phone
     #tprint("Re-encoding for phone...")
     #reEncode(newFileName, str(gameID) + '_phone')
-
 

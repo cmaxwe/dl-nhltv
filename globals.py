@@ -1,28 +1,17 @@
 # coding=utf-8
-import sys
-import re, os, time
-import calendar
-from time import time
-import pytz
-import urllib, urllib2
 import json
 import cookielib
-import time
-from bs4 import BeautifulSoup 
-from datetime import date, datetime, timedelta
-from urllib2 import URLError, HTTPError
-from cStringIO import StringIO
-import pdb
-import commands
-import subprocess
-
+from datetime import datetime
 
 #Settings
 USERNAME = ""
 PASSWORD = ""
 QUALITY = "5000"
 #QUALITY = "192" # Just for testing
-TEAMID = "19" # Washington = 15 # Philly = 4 # Rangers = 3 # Pens = 5 # Detroit = 17 # STL =  19# ANH = 24
+DOWNLOAD_FOLDER = "./" # Folder for downloaded files i.e.: /home/username/NHL_TV/
+RETRY_ERRORED_DOWNLOADS=False # usually works fine if you want it perfect set to True
+
+TEAMID = "24" # Washington = 15 # Philly = 4 # Rangers = 3 # Pens = 5 # Detroit = 17 # STL =  19# ANH = 24
 #TEAMID = "12" # Just for testing
 MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 SETTINGS_FILE = 'settings.json'
@@ -36,45 +25,44 @@ UA_PC = 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gec
 UA_PS4 = 'PS4Application libhttp/1.000 (PS4) libhttp/3.15 (PlayStation 4)'
 
 def tprint(outString):
-	outString = datetime.now().strftime('%m/%d/%y %H:%M:%S - ') + outString
-	print(outString) 
+    outString = datetime.now().strftime('%m/%d/%y %H:%M:%S - ') + outString
+    print(outString) 
 
 def find(source,start_str,end_str):    
-	start = source.find(start_str)
-	end = source.find(end_str,start+len(start_str))
+    start = source.find(start_str)
+    end = source.find(end_str,start+len(start_str))
 
-	if start != -1:        
-		return source[start+len(start_str):end]
-	else:
-		return ''
+    if start != -1:        
+        return source[start+len(start_str):end]
+    return ''
 
-def getSetting(id):
-	# Load the settings file
-	j = None
-	with open(SETTINGS_FILE, "r") as file:
-		j = json.load(file)
-	file.close()
-	if id in j:
-		return(j[id])
-	else:
-		return('')
+def getSetting(sid):
+    # Load the settings file
+    with open(SETTINGS_FILE, "r") as settingsFile:
+        j = json.load(settingsFile)
+    settingsFile.close()
+    if sid in j:
+        return(j[sid])
+    return('')
 
-def setSetting(id, value):
-	# Write to settings file
-	j = None
-	with open(SETTINGS_FILE, "r") as file:
-		j = json.load(file)
-	file.close()
-	j[id] = value
-	with open(SETTINGS_FILE, "w") as file:
-		json.dump(j, file, indent=4)
-	file.close()
+def setSetting(sid, value):
+    # Write to settings file
+    with open(SETTINGS_FILE, "r") as settingsFile:
+        j = json.load(settingsFile)
+    
+    settingsFile.close()
+    j[sid] = value
+    
+    with open(SETTINGS_FILE, "w") as settingsFile:
+        json.dump(j, settingsFile, indent=4)
+    
+    settingsFile.close()
 
 def saveCookiesAsText():
-	cjT = cookielib.MozillaCookieJar('cookies.txt')
+    cjT = cookielib.MozillaCookieJar('cookies.txt')
 
-	cj = cookielib.LWPCookieJar('cookies.lwp')
-	cj.load('cookies.lwp',ignore_discard=False)
-	for cookie in cj: 
-		cjT.set_cookie(cookie)
-	cjT.save(ignore_discard=False)
+    cj = cookielib.LWPCookieJar('cookies.lwp')
+    cj.load('cookies.lwp',ignore_discard=False)
+    for cookie in cj: 
+        cjT.set_cookie(cookie)
+    cjT.save(ignore_discard=False)
