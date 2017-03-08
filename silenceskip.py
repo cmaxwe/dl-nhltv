@@ -48,6 +48,10 @@ def silenceSkip(input, output):
         file.write("file\t" + 'cut' + str(i) + '.mp4\n')
     file.close()
 
+    # Create the download directory if required
+    command = 'mkdir -p ' + DOWNLOAD_FOLDER
+    subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
+
     command = 'ffmpeg -y -nostats -f concat -i ./temp/concat_list.txt -c copy ' + output
     subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
     tprint("Merging segments back to single video and saving: " + output)

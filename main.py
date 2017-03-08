@@ -71,10 +71,6 @@ def fetchStream(game_id, content_id, event_id):
         tprint(msg)
         return stream_url, media_auth
 
-    elif session_key == 'error':
-        tprint("some unknown error")
-        return stream_url, media_auth
-
     #Org
     url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream?contentId='+content_id+'&playbackScenario=HTTP_CLOUD_TABLET_60&platform=IPAD&sessionKey='+urllib.quote_plus(session_key)    
     req = urllib2.Request(url)       
@@ -94,7 +90,7 @@ def fetchStream(game_id, content_id, event_id):
     if json_source['status_code'] < 0:
         tprint(json_source['status_message'])
         # can't handle this at the moment lest get out of here
-        return 'error'
+        exit(1)
        
     if json_source['status_code'] == 1:
         if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
@@ -244,8 +240,6 @@ def login():
                 tprint(msg)
 
         response.close()
-      
-
         cj.save(ignore_discard=True); 
 
 
@@ -435,7 +429,7 @@ while(True):
     #tprint("Game ready! Waiting for " + str(waitTime/60) + ' minutes for it to finish propagating.')
     #time.sleep(waitTime)
 
-    # Download stream_url
+    tprint("Downloading stream_url")
     outputFile = str(gameID) + '_raw.mkv'
     download_nhl(stream_url, outputFile)
 

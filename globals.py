@@ -8,10 +8,10 @@ USERNAME = ""
 PASSWORD = ""
 QUALITY = "5000"
 #QUALITY = "192" # Just for testing
-DOWNLOAD_FOLDER = "./" # Folder for downloaded files i.e.: /home/username/NHL_TV/
+DOWNLOAD_FOLDER = "$HOME/Desktop/NHL/" # $HOME works since we use mkdir not python for creation
 RETRY_ERRORED_DOWNLOADS=False # usually works fine if you want it perfect set to True
 
-TEAMID = "24" # Washington = 15 # Philly = 4 # Rangers = 3 # Pens = 5 # Detroit = 17 # STL =  19# ANH = 24
+TEAMID = "17" # Washington = 15 # Philly = 4 # Rangers = 3 # Pens = 5 # Detroit = 17 # STL =  19# ANH = 24
 #TEAMID = "12" # Just for testing
 MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 SETTINGS_FILE = 'settings.json'

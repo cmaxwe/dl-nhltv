@@ -76,10 +76,6 @@ def download_nhl(url, outFile):
     # Create the temp and keys directory
     if not os.path.exists('./temp/keys'):
         os.makedirs('./temp/keys')
-
-    # Create the download directory if required
-    if not os.path.exists(DOWNLOAD_FOLDER):
-        os.makedirs(DOWNLOAD_FOLDER)
     
     # Get the master m3u8
     command = 'aria2c -o temp/master.m3u8' + DOWNLOAD_OPTIONS + url
