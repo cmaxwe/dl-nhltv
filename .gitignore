@@ -1,0 +1,8 @@
+*.pyc
+.project
+.pydevproject
+.settings/
+*_raw.mkv_download.log
+temp/
+*.mkv
+.DS_Store
