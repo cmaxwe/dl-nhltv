@@ -11,8 +11,37 @@ QUALITY = "5000"
 DOWNLOAD_FOLDER = "$HOME/Desktop/NHL/" # $HOME works since we use mkdir not python for creation
 RETRY_ERRORED_DOWNLOADS=False # usually works fine if you want it perfect set to True
 
-TEAMID = "17" # Washington = 15 # Philly = 4 # Rangers = 3 # Pens = 5 # Detroit = 17 # STL =  19# ANH = 24
-#TEAMID = "12" # Just for testing
+TEAMID = "17" # see below list
+# 1 NJD New Jersey Devils
+# 2 NYI New York Islanders
+# 3 NYR New York Rangers
+# 4 PHI Philadelphia Flyers
+# 5 PIT Pittsburgh Penguins
+# 6 BOS Boston Bruins
+# 7 BUF Buffalo Sabres
+# 8 MTL Montreal Canadiens
+# 9 OTT Ottawa Senators
+# 10 TOR Toronto Maple Leafs
+# 12 CAR Carolina Hurricanes
+# 13 FLA Florida Panthers
+# 14 TBL Tampa Bay Lightning
+# 15 WSH Washington Capitals
+# 16 CHI Chicago Blackhawks
+# 17 DET Detroit Red Wings
+# 18 NSH Nashville Predators
+# 19 STL St. Louis Blues
+# 20 CGY Calgary Flames
+# 21 COL Colorado Avalanche
+# 22 EDM Edmonton Oilers
+# 23 VAN Vancouver Canucks
+# 24 ANA Anaheim Ducks
+# 25 DAL Dallas Stars
+# 26 LAK Los Angeles Kings
+# 28 SJS San Jose Sharks
+# 29 CBJ Columbus Blue Jackets
+# 30 MIN Minnesota Wild
+# 52 WPG Winnipeg Jets
+# 53 ARI Arizona Coyotes
 MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 SETTINGS_FILE = 'settings.json'
 
