@@ -91,6 +91,7 @@ You need python 2.7 or higher. Might want to try 3 as some distries have 2.6 its
 sudo apt-get install aria2 ffmpeg
 ```
 For some distributions install ffmpeg follow howto of your choice like
+
 https://www.assetbank.co.uk/support/documentation/install/ffmpeg-debian-squeeze/ffmpeg-debian-jessie/
 
 
@@ -102,6 +103,7 @@ note: havent tried this pure guesswork RHEL likes its python2.6 as its system ve
 sudo yum install aria2 ffmpeg
 ```
 For some distributions install ffmpeg follow howto of your choice like
+
 https://www.assetbank.co.uk/support/documentation/install/ffmpeg-debian-squeeze/ffmpeg-debian-jessie/
 
 ## Configure dl-nhltv
