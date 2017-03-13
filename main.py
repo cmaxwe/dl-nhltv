@@ -48,12 +48,13 @@ def fetchStream(game_id, content_id, event_id):
     media_auth = ''    
    
     authorization = getAuthCookie()            
+
     
     if authorization == '':  
         login()
         authorization = getAuthCookie()   
         if authorization == '':
-            return stream_url, media_auth
+            return stream_url, media_auth, ""
 
     cj = cookielib.LWPCookieJar('cookies.lwp') 
     cj.load('cookies.lwp',ignore_discard=True) 
@@ -64,12 +65,12 @@ def fetchStream(game_id, content_id, event_id):
         
     tprint("Checking session key")
     if session_key == '':
-        return stream_url, media_auth
+        return stream_url, media_auth, ""
 
-    elif session_key == 'blackout':
+    if "blackout" in session_key:
         msg = "The game you are trying to access is not currently available due to local or national blackout restrictions.\n Full game archives will be available 48 hours after completion of this game."
         tprint(msg)
-        return stream_url, media_auth
+        return stream_url, media_auth, ""
 
     #Org
     url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream?contentId='+content_id+'&playbackScenario=HTTP_CLOUD_TABLET_60&platform=IPAD&sessionKey='+urllib.quote_plus(session_key)    
@@ -86,6 +87,10 @@ def fetchStream(game_id, content_id, event_id):
     json_source = json.load(response)       
     response.close()
 
+    # Pulling out game_info in formated like "2017-03-06_VAN-ANA" for file name prefix
+    game_info = getGameInfo(json_source)
+    tprint("game info=" + game_info)
+
     # Expecting - values to always be bad i.e.: -3500 is Sign-on restriction: Too many usage attempts
     if json_source['status_code'] < 0:
         tprint(json_source['status_message'])
@@ -96,20 +101,17 @@ def fetchStream(game_id, content_id, event_id):
         if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
             msg = "You do not have access to view this content. To watch live games and learn more about blackout restrictions, please visit NHL.TV"
             tprint(msg)
-        else:
-            stream_url = json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']    
-            media_auth = str(json_source['session_info']['sessionAttributes'][0]['attributeName']) + "=" + str(json_source['session_info']['sessionAttributes'][0]['attributeValue'])
-            session_key = json_source['session_key']
-            setSetting(sid='media_auth', value=media_auth) 
-            #Update Session Key
-            setSetting(sid='session_key', value=session_key)   
-    else:
-        msg = json_source['status_message']
-        tprint(msg)     
+            # TODO: go into wait loop here. For now we exit gracefully
+            exit(1)
+            # return stream_url, media_auth, ""
+
+    stream_url = json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']
+    media_auth = str(json_source['session_info']['sessionAttributes'][0]['attributeName']) + "=" + str(json_source['session_info']['sessionAttributes'][0]['attributeValue'])
+    session_key = json_source['session_key']
+    setSetting(sid='media_auth', value=media_auth)
+    #Update Session Key
+    setSetting(sid='session_key', value=session_key)
     
-    # Pulling out game_info in formated like "2017-03-06_VAN-ANA" for file name prefix
-    game_info = getGameInfo(json_source)
-    tprint("game info=" + game_info)
 
     # Add media_auth cookie
     ck = cookielib.Cookie(version=0, name='mediaAuth', value="" + media_auth.replace('mediaAuth=','') + "", port=None, port_specified=False, domain='.nhl.com', domain_specified=True, domain_initial_dot=True, path='/', path_specified=True, secure=False, expires=(int(time.time()) + 7500), discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)
