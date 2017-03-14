@@ -5,7 +5,9 @@ from datetime import timedelta
 import urllib2
 import urllib
 import time
+import os.path
 
+from fileinput import filename
 
 def createFullGameStream(stream_url, media_auth):
     #SD (800 kbps)|SD (1600 kbps)|HD (3000 kbps)|HD (5000 kbps)        
@@ -30,13 +32,13 @@ def createFullGameStream(stream_url, media_auth):
 def getAuthCookie():
     authorization = ''    
     try:
-        cj = cookielib.LWPCookieJar('cookies.lwp')
-        cj.load('cookies.lwp',ignore_discard=True)    
+        cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
+        cj.load(COOKIES_LWP_FILE,ignore_discard=True)
 
         #If authorization cookie is missing or stale, perform login    
         for cookie in cj:            
             if cookie.name == "Authorization" and not cookie.is_expired():            
-                authorization = cookie.value 
+                authorization = cookie.value
     except:
         pass
 
@@ -56,8 +58,8 @@ def fetchStream(game_id, content_id, event_id):
         if authorization == '':
             return stream_url, media_auth, ""
 
-    cj = cookielib.LWPCookieJar('cookies.lwp') 
-    cj.load('cookies.lwp',ignore_discard=True) 
+    cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
+    cj.load(COOKIES_LWP_FILE,ignore_discard=True)
     
     tprint("Fetching session_key")        
     session_key = getSessionKey(game_id,event_id,content_id,authorization)    
@@ -115,8 +117,8 @@ def fetchStream(game_id, content_id, event_id):
 
     # Add media_auth cookie
     ck = cookielib.Cookie(version=0, name='mediaAuth', value="" + media_auth.replace('mediaAuth=','') + "", port=None, port_specified=False, domain='.nhl.com', domain_specified=True, domain_initial_dot=True, path='/', path_specified=True, secure=False, expires=(int(time.time()) + 7500), discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)
-    cj = cookielib.LWPCookieJar('cookies.lwp')
-    cj.load('cookies.lwp',ignore_discard=True)
+    cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
+    cj.load(COOKIES_LWP_FILE,ignore_discard=True)
     cj.set_cookie(ck)
     cj.save(ignore_discard=False)
 
@@ -189,11 +191,11 @@ def login():
     global PASSWORD
    
     if USERNAME != '' and PASSWORD != '':        
-        cj = cookielib.LWPCookieJar('cookies.lwp') 
+        cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))   
 
         try:
-            cj.load('cookies.lwp',ignore_discard=True)
+            cj.load(COOKIES_LWP_FILE,ignore_discard=True)
         except:
             pass
 
@@ -242,13 +244,13 @@ def login():
                 tprint(msg)
 
         response.close()
-        cj.save(ignore_discard=True); 
+        cj.save(ignore_discard=True);
 
 
 def logout(display_msg=None):    
-    cj = cookielib.LWPCookieJar('cookies.lwp')   
+    cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
     try:  
-        cj.load('cookies.lwp',ignore_discard=True)
+        cj.load(COOKIES_LWP_FILE,ignore_discard=True)
     except:
         pass
         
@@ -411,12 +413,30 @@ def reEncode(inputFile, outputFile):
     command = 'rm ' + outputFile + '.mkv'
     subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
 
+def touch(fname):
+    with open(fname, 'w'):
+        pass
 
+def createSettingsFile(fname):
+    with open(fname, "w") as settingsFile:
+        jstring = """{
+    "session_key": "000",
+    "media_auth": "mediaAuth=000",
+    "lastGameID": 2015030166
+}"""
+        j = json.loads(jstring)
+        json.dump(j, settingsFile, indent=4)
+
+def createMandatoryFiles():
+    if not os.path.isfile(COOKIES_LWP_FILE): touch(COOKIES_LWP_FILE)
+    if not os.path.isfile(COOKIES_TXT_FILE): touch(COOKIES_TXT_FILE)
+    if not os.path.isfile(SETTINGS_FILE): createSettingsFile(SETTINGS_FILE)
 
 #-----------------------------MAIN CODE--------------------#    
 # Find the gameID or wait until one is ready
 
 while(True):
+    createMandatoryFiles()
     gameID = None
     while(gameID == None):
         gameID, contentID, eventID = getGameId()

@@ -6,3 +6,5 @@
 temp/
 *.mkv
 .DS_Store
+cookies*
+settings.json
