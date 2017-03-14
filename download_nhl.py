@@ -24,7 +24,7 @@ def remove_lines_without_errors(errors):
     download_file.close()
 
 def redo_broken_downloads(outFile):
-    DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
+    DOWNLOAD_OPTIONS = " --load-cookies=" + COOKIES_TXT_FILE + " --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
 
     logFileName = outFile + '_download.log'
 
@@ -67,7 +67,7 @@ def redo_broken_downloads(outFile):
 
 
 def download_nhl(url, outFile):
-    DOWNLOAD_OPTIONS = " --load-cookies=cookies.txt --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
+    DOWNLOAD_OPTIONS = " --load-cookies=" + COOKIES_TXT_FILE + " --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
     tprint("Starting Download: " + url)
     
     # Pull url_root

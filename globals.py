@@ -44,7 +44,8 @@ TEAMID = "17" # see below list
 # 53 ARI Arizona Coyotes
 MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 SETTINGS_FILE = 'settings.json'
-
+COOKIES_LWP_FILE = "cookies.lwp"
+COOKIES_TXT_FILE = "cookies.txt"
 #User Agents
 UA_GCL = 'NHL1415/5.0925 CFNetwork/711.4.6 Darwin/14.0.0'
 UA_IPHONE = 'Mozilla/5.0 (iPhone; CPU iPhone OS 8_4 like Mac OS X) AppleWebKit/600.1.4 (KHTML, like Gecko) Mobile/12H143 iphone nhl 5.0925'
@@ -88,10 +89,10 @@ def setSetting(sid, value):
     settingsFile.close()
 
 def saveCookiesAsText():
-    cjT = cookielib.MozillaCookieJar('cookies.txt')
+    cjT = cookielib.MozillaCookieJar(COOKIES_TXT_FILE)
 
-    cj = cookielib.LWPCookieJar('cookies.lwp')
-    cj.load('cookies.lwp',ignore_discard=False)
+    cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
+    cj.load(COOKIES_LWP_FILE, ignore_discard=False)
     for cookie in cj: 
         cjT.set_cookie(cookie)
     cjT.save(ignore_discard=False)
