@@ -6,20 +6,36 @@ Download NHL.tv Streams with up to 720p60 and remove the commercial breaks
 * Mac or Linux. Sorry Windows users! You could maybe run it through Cygwin?
 * python 2.7, aia2c, openssl, ffmpeg
 
-## Steps to get it working once installed...
-
-1. Set your username in the globals.py file
-2. Set your password in the globals.py file
-3. Set the team id in the globals.py (see comment block below for id) 
-4. Set your quality in the globals.py file (or leave it at 5000k)
 
 ## Usage:
 ```
-python2.7 main.py
+usage: nhltv.py [-h] -t TEAMID [-u USERNAME] [-p PASSWORD] [-q QUALITY]
+                [-d DOWNLOAD_FOLDER] [-r] [-m]
+
+nhltv.py: Download NHL TV
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -t TEAMID, --team TEAMID
+                        Team ID i.e. 17 or DET or Detroit
+  -u USERNAME, --username USERNAME
+                        User name of your NHLTV account
+  -p PASSWORD, --password PASSWORD
+                        Password of your NHL TV account
+  -q QUALITY, --quality QUALITY
+                        is highest by default you can set it to 5000, 3500,
+                        1500, 900
+  -d DOWNLOAD_FOLDER, --download_folder DOWNLOAD_FOLDER
+                        Output folder where you want to store your final file
+                        like $HOME/Desktop/NHL/
+  -r, --retry           Usually works fine without, Use this flag if you want
+                        it perfect
+  -m, --mobile_video    Set this to also encode video for mobile devices
 ```
 
+
 # How to install
-dl-nhltv is a python2.7 script that needs ffmpeg and aria2.
+nhltv is a python2.7 script that needs ffmpeg and aria2.
 
 ## OS X > 10.9 
 You can install from precompiled binaries for from source 
@@ -126,11 +142,11 @@ OS X TextEdit is messing up the quotes by turning normal up quotes into some spe
 * Hit enter
 * Run 
 ```
-python2.7 main.py 
+python2.7 nhltv.py -t Detroit 
 ```
 
 # How dl-nhltv works 
-When it runs it will check the nhl.tv servers for a new game for your team and if it finds it then it will download it. Then after it downloads it will do a loop and start looking for the next game. It saves the id of the last game so if you aren't getting the results you expect then take a look at the settings.json file and set the game id manually to be lower than the gameid you want to download.
+When it runs it will check the nhl.tv servers for a new game for your team and if it finds it then it will download it. Then after it downloads it will do a loop and start looking for the next game. It saves the id of the last game so if you aren't getting the results you expect then take a look at the settings.json file and set the game id manually to be lower than the gameid you want to download. It also saves the username and password in the settings.json file
 
 ## Files and folders
 dl-nhltv downloads the parts of a stream into a temp/ subfolder below its source code. 
