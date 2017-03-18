@@ -80,51 +80,33 @@ class DownloadNHL(object):
                 _ = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
 
                 lastErrorCount = len(errors)
-            else:
-                break
 
-    def download_nhl(self, url, outFile, retry_errored=False):
-        DOWNLOAD_OPTIONS = " --load-cookies=" + COOKIES_TXT_FILE + " --log='" + outFile + "_download.log' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
-        tprint("Starting Download: " + url)
-
-        # Pull url_root
-        url_root = re.match('(.*)master_tablet60.m3u8', url, re.M | re.I).group(1)
-
-        # Create the temp and keys directory
-        if not os.path.exists('./temp/keys'):
-            os.makedirs('./temp/keys')
-
-        # Get the master m3u8
-        command = 'aria2c -o temp/master.m3u8' + DOWNLOAD_OPTIONS + url
-        subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
-
+    def getQualityUrlFromMaster_m3u8(self, masterFile):
         # Parse the master and get the quality URL
-        command = 'cat ./temp/master.m3u8'
-        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-        pi = iter(p.stdout.readline, b'')
-        quality_url = ''
-        for line in pi:
-            if(self.quality + 'K' in line):
-                quality_url = url_root + line
+        fh = open(masterFile, 'r')
+        for line in fh:
+            if self.quality + 'K' in line:
+                return line
 
-        # Get the m3u8 for the quality
-        command = 'aria2c -o temp/input.m3u8' + DOWNLOAD_OPTIONS + quality_url
+        # Otherwise we return the highest value
+        return line
+
+    def downloadWebPage(self, url, outputFile, logFile):
+        DOWNLOAD_OPTIONS = " --load-cookies=" + COOKIES_TXT_FILE + " --log='" + logFile + "' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
+        command = 'aria2c -o ' + outputFile + DOWNLOAD_OPTIONS + url
         subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True).wait()
 
-        # Parse m3u8
-        # Create files
-        download_file = open("./temp/download_file.txt", "w")
+    def createDownloadFile(self, inputFile, download_file, quality_url):
+        download_file = open(download_file, "w")
         quality_url_root = re.search(r'(.*/)(.*)', quality_url, re.M | re.I).group(1)
 
-        command = 'cat ./temp/input.m3u8'
-        p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, shell=True)
-        pi = iter(p.stdout.readline, b'')
+        fh = open(inputFile, 'r')
         ts_number = 0
         key_number = 0
         cur_iv = 0
         decode_hashes = []
 
-        for line in pi:
+        for line in fh:
             if('#EXT-X-KEY' in line):
                 # Incremenet key number
                 key_number = key_number + 1
@@ -155,8 +137,34 @@ class DownloadNHL(object):
 
                 # Add to decode_hashes
                 decode_hashes.append({'key_number': str(key_number), 'ts_number': str(ts_number), 'iv': str(cur_iv)})
-        p.wait()
         download_file.close()
+        return decode_hashes
+
+    def download_nhl(self, url, outFile, retry_errored=False):
+        logFile = outFile + "_download.log"
+        DOWNLOAD_OPTIONS = " --load-cookies=" + COOKIES_TXT_FILE + " --log='" + logFile + "' --log-level=notice --quiet=true --retry-wait=1 --max-file-not-found=5 --max-tries=5 --header='Accept: */*' --header='Accept-Language: en-US,en;q=0.8' --header='Origin: https://www.nhl.com' -U='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.97 Safari/537.36' --enable-http-pipelining=true --auto-file-renaming=false --allow-overwrite=true "
+        tprint("Starting Download: " + url)
+
+        # Pull url_root
+        url_root = re.match('(.*)master_tablet60.m3u8', url, re.M | re.I).group(1)
+
+        # Create the temp and keys directory
+        if not os.path.exists('./temp/keys'):
+            os.makedirs('./temp/keys')
+
+        # Get the master m3u8
+        masterFile = "temp/master.m3u8"
+        self.downloadWebPage(url, masterFile, logFile)
+        quality_url = url_root + self.getQualityUrlFromMaster_m3u8(masterFile)
+
+        # Get the m3u8 for the quality
+        inputFile = "temp/input.m3u8"
+        self.downloadWebPage(quality_url, inputFile, logFile)
+
+        # Parse m3u8
+        # Create files
+        download_file = "./temp/download_file.txt"
+        decode_hashes = self.createDownloadFile(inputFile, download_file, quality_url)
 
         #  for testing only shorten it to 100
 #         tprint("shorting to 100 files for testing")

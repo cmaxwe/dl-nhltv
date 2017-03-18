@@ -47,6 +47,16 @@ class Test_nhltv_lib_download_nhl(unittest.TestCase):
         self.assertTrue(isinstance(eventID, str), "Expected contentID to be of type str")
         self.assertEqual(eventID, "221-1004480", "Expected eventID=221-1004480")
 
+    def test_getQualityUrlFromMaster_m3u8(self):
+        masterFile = os.path.join("data", "master.m3u8")
+        quality_url = self.dl.getQualityUrlFromMaster_m3u8(masterFile)
+        self.assertTrue("3500K" in quality_url)
+
+    def test_createDownloadFile(self):
+        quality_url = "http://hlslive-akc.med2.med.nhl.com/hdnts=exp=1489918789~acl=/*~id=nhlGatewayId:3821533~data=50068103~hmac=8004dc987fb52ff4b2aff47edbf6845a686755bdd2f34d66e9da312a265cb97f/5fa5a38415b1e0787f24aa9005f8377a/ls04/nhl/2017/03/17/NHL_GAME_VIDEO_BOSEDM_M2_HOME_20170317_1488820214854/3500K/3500_complete-trimmed.m3u8"
+        download_file = os.path.join("data", "test_download_file.txt")
+        inputFile = os.path.join("data", "input.m3u8")
+        self.dl.createDownloadFile(inputFile, download_file, quality_url)
 
 if __name__ == '__main__':
     unittest.main()
