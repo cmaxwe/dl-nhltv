@@ -127,6 +127,9 @@ def parse_args():
         dl.quality = int(args.QUALITY)
     if args.DOWNLOAD_FOLDER:
         DOWNLOAD_FOLDER = args.DOWNLOAD_FOLDER
+    else:
+        DOWNLOAD_FOLDER = getSetting("DOWNLOAD_FOLDER")
+
     if args.RETRY_ERRORED_DOWNLOADS:
         RETRY_ERRORED_DOWNLOADS = args.RETRY_ERRORED_DOWNLOADS
     if args.MOBILE_VIDEO:
