@@ -57,6 +57,11 @@ def main():
 
 
 def parse_args():
+
+    global DOWNLOAD_FOLDER
+    global RETRY_ERRORED_DOWNLOADS
+    global MOBILE_VIDEO
+
     parser = argparse.ArgumentParser(description='%(prog)s: Download NHL TV')
 
     parser.add_argument(
@@ -124,9 +129,10 @@ def parse_args():
         exit(1)
 
     if args.QUALITY:
-        dl.quality = int(args.QUALITY)
+        dl.quality = str(args.QUALITY)
     if args.DOWNLOAD_FOLDER:
         DOWNLOAD_FOLDER = args.DOWNLOAD_FOLDER
+        setSetting("DOWNLOAD_FOLDER", DOWNLOAD_FOLDER)
     else:
         DOWNLOAD_FOLDER = getSetting("DOWNLOAD_FOLDER")
 
@@ -135,6 +141,7 @@ def parse_args():
     if args.MOBILE_VIDEO:
         MOBILE_VIDEO = args.MOBILE_VIDEO
 
+    print "parse_args: DOWNLOAD_FOLDER = " + DOWNLOAD_FOLDER
     while(True):
         main()
 
