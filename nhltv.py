@@ -1,6 +1,6 @@
 from nhltv_lib.silenceskip import silenceSkip
 from nhltv_lib.download_nhl import DownloadNHL
-from nhltv_lib.common import tprint, saveCookiesAsText, getSetting
+from nhltv_lib.common import tprint, saveCookiesAsText, getSetting, which
 from nhltv_lib.common import setSetting, createMandatoryFiles
 import argparse
 from nhltv_lib.video import reEncode
@@ -61,6 +61,14 @@ def parse_args():
     global DOWNLOAD_FOLDER
     global RETRY_ERRORED_DOWNLOADS
     global MOBILE_VIDEO
+
+    if which("ffmpeg") is False:
+        print ("Missing ffmpeg command please install or check PATH exiting...")
+        exit(1)
+
+    if which("aira2c") is False:
+        print ("Missing aira2c command please install or check PATH exiting...")
+        exit(1)
 
     parser = argparse.ArgumentParser(description='%(prog)s: Download NHL TV')
 

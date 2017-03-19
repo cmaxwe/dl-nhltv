@@ -2,6 +2,8 @@ import json
 import cookielib
 from datetime import datetime
 import os
+import subprocess
+from Carbon.Aliases import false
 
 MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 SETTINGS_FILE = 'settings.json'
@@ -96,3 +98,11 @@ def createMandatoryFiles():
 
     if not os.path.isfile(COOKIES_TXT_FILE):
         touch(COOKIES_TXT_FILE)
+
+
+def which(program):
+    command = 'which ' + program
+    returnCode = subprocess.Popen(command, shell=True).wait()
+    if returnCode == 0:
+            return True
+    return False
