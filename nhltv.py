@@ -66,8 +66,8 @@ def parse_args():
         print ("Missing ffmpeg command please install or check PATH exiting...")
         exit(1)
 
-    if which("aira2c") is False:
-        print ("Missing aira2c command please install or check PATH exiting...")
+    if which("aria2c") is False:
+        print ("Missing aria2c command please install or check PATH exiting...")
         exit(1)
 
     parser = argparse.ArgumentParser(description='%(prog)s: Download NHL TV')
