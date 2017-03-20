@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Standings>
+  <League Name="LEAGUE">
+    <StatsGroup Order="1" Count="5" Primary="0" Stat0="GP" Width0="S" Stat1="W" Width1="S" Stat2="L" Width2="S" Stat3="OTL" Width3="S" Stat4="PTS" Width4="S" />
+    <StatsGroup Order="2" Count="4" Primary="0" Stat0="GF" Width0="S" Stat1="GA" Width1="S" Stat2="L10" Width2="S" Stat3="STRK" Width3="S" />
+  </League>
+  <Conference Name="WESTERN">
+    <StatsGroup Order="1" Count="5" Primary="0" Stat0="GP" Width0="S" Stat1="W" Width1="S" Stat2="L" Width2="S" Stat3="OTL" Width3="S" Stat4="PTS" Width4="S" />
+    <StatsGroup Order="2" Count="4" Primary="0" Stat0="GF" Width0="S" Stat1="GA" Width1="S" Stat2="L10" Width2="S" Stat3="STRK" Width3="S" />
+    <StatsSection Heading="PACIFIC">
+      <StatsGroup Order="1" Count="5" Primary="0" Stat0="GP" Width0="S" Stat1="W" Width1="S" Stat2="L" Width2="S" Stat3="OTL" Width3="S" Stat4="PTS" Width4="S" />
+      <StatsGroup Order="2" Count="4" Primary="0" Stat0="GF" Width0="S" Stat1="GA" Width1="S" Stat2="L10" Width2="S" Stat3="STRK" Width3="S" />
+      <Standing Id="28" Team="San Jose Sharks" TriCode="SJS" LeagueRank="7" ConfRank="3" DivRank="1" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="39" Width1="S" Stat2="19" Width2="S" Stat3="7" Width3="S" Stat4="85" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="180" Width0="S" Stat1="152" Width1="S" Stat2="6-1-3" Width2="S" Stat3="W1" Width3="S" />
+      </Standing>
+      <Standing Id="22" Team="Edmonton Oilers" TriCode="EDM" LeagueRank="10" ConfRank="4" DivRank="2" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="66" Width0="S" Stat1="35" Width1="S" Stat2="23" Width2="S" Stat3="8" Width3="S" Stat4="78" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="188" Width0="S" Stat1="174" Width1="S" Stat2="6-4-0" Width2="S" Stat3="L1" Width3="S" />
+      </Standing>
+      <Standing Id="24" Team="Anaheim Ducks" TriCode="ANA" LeagueRank="11" ConfRank="5" DivRank="3" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="66" Width0="S" Stat1="34" Width1="S" Stat2="22" Width2="S" Stat3="10" Width3="S" Stat4="78" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="172" Width0="S" Stat1="168" Width1="S" Stat2="5-5-0" Width2="S" Stat3="W1" Width3="S" />
+      </Standing>
+      <Standing Id="20" Team="Calgary Flames" TriCode="CGY" LeagueRank="12" ConfRank="6" DivRank="4" Rank="0" HasDivider="false" DefaultTeam="true">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="66" Width0="S" Stat1="36" Width1="S" Stat2="26" Width2="S" Stat3="4" Width3="S" Stat4="76" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="179" Width0="S" Stat1="182" Width1="S" Stat2="8-1-1" Width2="S" Stat3="W7" Width3="S" />
+      </Standing>
+      <Standing Id="26" Team="Los Angeles Kings" TriCode="LAK" LeagueRank="21" ConfRank="9" DivRank="5" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="31" Width1="S" Stat2="28" Width2="S" Stat3="6" Width3="S" Stat4="68" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="161" Width0="S" Stat1="164" Width1="S" Stat2="3-5-2" Width2="S" Stat3="L1" Width3="S" />
+      </Standing>
+      <Standing Id="23" Team="Vancouver Canucks" TriCode="VAN" LeagueRank="24" ConfRank="11" DivRank="6" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="66" Width0="S" Stat1="28" Width1="S" Stat2="30" Width2="S" Stat3="8" Width3="S" Stat4="64" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="153" Width0="S" Stat1="188" Width1="S" Stat2="3-5-2" Width2="S" Stat3="-" Width3="S" />
+      </Standing>
+      <Standing Id="53" Team="Arizona Coyotes" TriCode="ARI" LeagueRank="29" ConfRank="13" DivRank="7" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="23" Width1="S" Stat2="35" Width2="S" Stat3="7" Width3="S" Stat4="53" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="157" Width0="S" Stat1="210" Width1="S" Stat2="4-6-0" Width2="S" Stat3="L1" Width3="S" />
+      </Standing>
+    </StatsSection>
+    <StatsSection Heading="CENTRAL">
+      <StatsGroup Order="1" Count="5" Primary="0" Stat0="GP" Width0="S" Stat1="W" Width1="S" Stat2="L" Width2="S" Stat3="OTL" Width3="S" Stat4="PTS" Width4="S" />
+      <StatsGroup Order="2" Count="4" Primary="0" Stat0="GF" Width0="S" Stat1="GA" Width1="S" Stat2="L10" Width2="S" Stat3="STRK" Width3="S" />
+      <Standing Id="30" Team="Minnesota Wild" TriCode="MIN" LeagueRank="2" ConfRank="1" DivRank="1" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="64" Width0="S" Stat1="42" Width1="S" Stat2="16" Width2="S" Stat3="6" Width3="S" Stat4="90" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="213" Width0="S" Stat1="151" Width1="S" Stat2="6-4-0" Width2="S" Stat3="L1" Width3="S" />
+      </Standing>
+      <Standing Id="16" Team="Chicago Blackhawks" TriCode="CHI" LeagueRank="5" ConfRank="2" DivRank="2" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="42" Width1="S" Stat2="18" Width2="S" Stat3="5" Width3="S" Stat4="89" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="198" Width0="S" Stat1="164" Width1="S" Stat2="9-1-0" Width2="S" Stat3="W7" Width3="S" />
+      </Standing>
+      <Standing Id="18" Team="Nashville Predators" TriCode="NSH" LeagueRank="14" ConfRank="7" DivRank="3" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="66" Width0="S" Stat1="32" Width1="S" Stat2="24" Width2="S" Stat3="10" Width3="S" Stat4="74" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="195" Width0="S" Stat1="188" Width1="S" Stat2="5-3-2" Width2="S" Stat3="-" Width3="S" />
+      </Standing>
+      <Standing Id="19" Team="St. Louis Blues" TriCode="STL" LeagueRank="17" ConfRank="8" DivRank="4" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="33" Width1="S" Stat2="27" Width2="S" Stat3="5" Width3="S" Stat4="71" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="178" Width0="S" Stat1="183" Width1="S" Stat2="5-5-0" Width2="S" Stat3="W2" Width3="S" />
+      </Standing>
+      <Standing Id="52" Team="Winnipeg Jets" TriCode="WPG" LeagueRank="23" ConfRank="10" DivRank="5" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="68" Width0="S" Stat1="30" Width1="S" Stat2="32" Width2="S" Stat3="6" Width3="S" Stat4="66" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="204" Width0="S" Stat1="216" Width1="S" Stat2="5-3-2" Width2="S" Stat3="L2" Width3="S" />
+      </Standing>
+      <Standing Id="25" Team="Dallas Stars" TriCode="DAL" LeagueRank="25" ConfRank="12" DivRank="6" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="67" Width0="S" Stat1="27" Width1="S" Stat2="30" Width2="S" Stat3="10" Width3="S" Stat4="64" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="188" Width0="S" Stat1="216" Width1="S" Stat2="5-5-0" Width2="S" Stat3="L1" Width3="S" />
+      </Standing>
+      <Standing Id="21" Team="Colorado Avalanche" TriCode="COL" LeagueRank="30" ConfRank="14" DivRank="7" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="18" Width1="S" Stat2="44" Width2="S" Stat3="3" Width3="S" Stat4="39" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="126" Width0="S" Stat1="215" Width1="S" Stat2="3-6-1" Width2="S" Stat3="W1" Width3="S" />
+      </Standing>
+    </StatsSection>
+  </Conference>
+  <Conference Name="EASTERN">
+    <StatsGroup Order="1" Count="5" Primary="0" Stat0="GP" Width0="S" Stat1="W" Width1="S" Stat2="L" Width2="S" Stat3="OTL" Width3="S" Stat4="PTS" Width4="S" />
+    <StatsGroup Order="2" Count="4" Primary="0" Stat0="GF" Width0="S" Stat1="GA" Width1="S" Stat2="L10" Width2="S" Stat3="STRK" Width3="S" />
+    <StatsSection Heading="ATLANTIC">
+      <StatsGroup Order="1" Count="5" Primary="0" Stat0="GP" Width0="S" Stat1="W" Width1="S" Stat2="L" Width2="S" Stat3="OTL" Width3="S" Stat4="PTS" Width4="S" />
+      <StatsGroup Order="2" Count="4" Primary="0" Stat0="GF" Width0="S" Stat1="GA" Width1="S" Stat2="L10" Width2="S" Stat3="STRK" Width3="S" />
+      <Standing Id="8" Team="Montreal Canadiens" TriCode="MTL" LeagueRank="8" ConfRank="5" DivRank="1" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="67" Width0="S" Stat1="38" Width1="S" Stat2="21" Width2="S" Stat3="8" Width3="S" Stat4="84" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="185" Width0="S" Stat1="166" Width1="S" Stat2="7-3-0" Width2="S" Stat3="W6" Width3="S" />
+      </Standing>
+      <Standing Id="9" Team="Ottawa Senators" TriCode="OTT" LeagueRank="9" ConfRank="6" DivRank="2" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="37" Width1="S" Stat2="22" Width2="S" Stat3="6" Width3="S" Stat4="80" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="175" Width0="S" Stat1="169" Width1="S" Stat2="7-3-0" Width2="S" Stat3="W4" Width3="S" />
+      </Standing>
+      <Standing Id="6" Team="Boston Bruins" TriCode="BOS" LeagueRank="13" ConfRank="7" DivRank="3" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="67" Width0="S" Stat1="35" Width1="S" Stat2="26" Width2="S" Stat3="6" Width3="S" Stat4="76" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="188" Width0="S" Stat1="175" Width1="S" Stat2="7-3-0" Width2="S" Stat3="W1" Width3="S" />
+      </Standing>
+      <Standing Id="10" Team="Toronto Maple Leafs" TriCode="TOR" LeagueRank="16" ConfRank="9" DivRank="4" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="29" Width1="S" Stat2="22" Width2="S" Stat3="14" Width3="S" Stat4="72" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="197" Width0="S" Stat1="195" Width1="S" Stat2="3-4-3" Width2="S" Stat3="W1" Width3="S" />
+      </Standing>
+      <Standing Id="14" Team="Tampa Bay Lightning" TriCode="TBL" LeagueRank="19" ConfRank="11" DivRank="5" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="30" Width1="S" Stat2="26" Width2="S" Stat3="9" Width3="S" Stat4="69" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="179" Width0="S" Stat1="181" Width1="S" Stat2="6-2-2" Width2="S" Stat3="-" Width3="S" />
+      </Standing>
+      <Standing Id="13" Team="Florida Panthers" TriCode="FLA" LeagueRank="20" ConfRank="12" DivRank="6" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="29" Width1="S" Stat2="25" Width2="S" Stat3="11" Width3="S" Stat4="69" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="162" Width0="S" Stat1="183" Width1="S" Stat2="4-5-1" Width2="S" Stat3="L2" Width3="S" />
+      </Standing>
+      <Standing Id="7" Team="Buffalo Sabres" TriCode="BUF" LeagueRank="22" ConfRank="13" DivRank="7" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="67" Width0="S" Stat1="27" Width1="S" Stat2="28" Width2="S" Stat3="12" Width3="S" Stat4="66" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="169" Width0="S" Stat1="196" Width1="S" Stat2="3-5-2" Width2="S" Stat3="L2" Width3="S" />
+      </Standing>
+      <Standing Id="17" Team="Detroit Red Wings" TriCode="DET" LeagueRank="28" ConfRank="16" DivRank="8" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="25" Width1="S" Stat2="29" Width2="S" Stat3="11" Width3="S" Stat4="61" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="161" Width0="S" Stat1="196" Width1="S" Stat2="3-6-1" Width2="S" Stat3="L3" Width3="S" />
+      </Standing>
+    </StatsSection>
+    <StatsSection Heading="METROPOLITAN">
+      <StatsGroup Order="1" Count="5" Primary="0" Stat0="GP" Width0="S" Stat1="W" Width1="S" Stat2="L" Width2="S" Stat3="OTL" Width3="S" Stat4="PTS" Width4="S" />
+      <StatsGroup Order="2" Count="4" Primary="0" Stat0="GF" Width0="S" Stat1="GA" Width1="S" Stat2="L10" Width2="S" Stat3="STRK" Width3="S" />
+      <Standing Id="15" Team="Washington Capitals" TriCode="WSH" LeagueRank="1" ConfRank="1" DivRank="1" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="44" Width1="S" Stat2="14" Width2="S" Stat3="7" Width3="S" Stat4="95" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="212" Width0="S" Stat1="139" Width1="S" Stat2="6-3-1" Width2="S" Stat3="L1" Width3="S" />
+      </Standing>
+      <Standing Id="29" Team="Columbus Blue Jackets" TriCode="CBJ" LeagueRank="3" ConfRank="2" DivRank="2" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="42" Width1="S" Stat2="17" Width2="S" Stat3="6" Width3="S" Stat4="90" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="207" Width0="S" Stat1="149" Width1="S" Stat2="7-2-1" Width2="S" Stat3="W2" Width3="S" />
+      </Standing>
+      <Standing Id="5" Team="Pittsburgh Penguins" TriCode="PIT" LeagueRank="4" ConfRank="3" DivRank="3" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="41" Width1="S" Stat2="16" Width2="S" Stat3="8" Width3="S" Stat4="90" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="230" Width0="S" Stat1="184" Width1="S" Stat2="6-3-1" Width2="S" Stat3="W3" Width3="S" />
+      </Standing>
+      <Standing Id="3" Team="New York Rangers" TriCode="NYR" LeagueRank="6" ConfRank="4" DivRank="4" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="67" Width0="S" Stat1="43" Width1="S" Stat2="22" Width2="S" Stat3="2" Width3="S" Stat4="88" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="216" Width0="S" Stat1="175" Width1="S" Stat2="6-3-1" Width2="S" Stat3="W2" Width3="S" />
+      </Standing>
+      <Standing Id="2" Team="New York Islanders" TriCode="NYI" LeagueRank="15" ConfRank="8" DivRank="5" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="31" Width1="S" Stat2="23" Width2="S" Stat3="11" Width3="S" Stat4="73" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="192" Width0="S" Stat1="194" Width1="S" Stat2="6-3-1" Width2="S" Stat3="W1" Width3="S" />
+      </Standing>
+      <Standing Id="4" Team="Philadelphia Flyers" TriCode="PHI" LeagueRank="18" ConfRank="10" DivRank="6" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="65" Width0="S" Stat1="31" Width1="S" Stat2="26" Width2="S" Stat3="8" Width3="S" Stat4="70" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="170" Width0="S" Stat1="193" Width1="S" Stat2="5-4-1" Width2="S" Stat3="W1" Width3="S" />
+      </Standing>
+      <Standing Id="12" Team="Carolina Hurricanes" TriCode="CAR" LeagueRank="26" ConfRank="14" DivRank="7" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="63" Width0="S" Stat1="26" Width1="S" Stat2="27" Width2="S" Stat3="10" Width3="S" Stat4="62" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="156" Width0="S" Stat1="183" Width1="S" Stat2="2-5-3" Width2="S" Stat3="L1" Width3="S" />
+      </Standing>
+      <Standing Id="1" Team="New Jersey Devils" TriCode="NJD" LeagueRank="27" ConfRank="15" DivRank="8" Rank="0" HasDivider="false" DefaultTeam="false">
+        <StatsGroup Order="1" Count="5" Primary="0" Stat0="66" Width0="S" Stat1="25" Width1="S" Stat2="29" Width2="S" Stat3="12" Width3="S" Stat4="62" Width4="S" />
+        <StatsGroup Order="2" Count="4" Primary="0" Stat0="147" Width0="S" Stat1="189" Width1="S" Stat2="1-7-2" Width2="S" Stat3="L4" Width3="S" />
+      </Standing>
+    </StatsSection>
+  </Conference>
+  <YinzNode InVenue="false" VenueStatus="O" Ads="YC" />
+</Standings>
