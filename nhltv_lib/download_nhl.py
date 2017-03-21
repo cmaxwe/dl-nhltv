@@ -13,6 +13,7 @@ import json
 from datetime import timedelta
 from datetime import datetime
 import time
+import getpass
 
 
 class DownloadNHL(object):
@@ -400,13 +401,10 @@ class DownloadNHL(object):
 
     def login(self):
         # Check if username and password are provided
-
-        if self.userName == "":
-            tprint("Error: Missing username")
-            exit(1)
-        if self.passWord == "":
-            tprint("Error: Missing password")
-            exit(1)
+        print("Need to login to NHL Gamecenter")
+        if (self.userName == "") or (self.passWord == ""):
+            self.userName = raw_input("Username: ")
+            self.passWord = getpass.getpass()
 
         cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))

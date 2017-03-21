@@ -12,6 +12,8 @@ DOWNLOAD_FOLDER = ""
 TEAMID = 0
 dl = DownloadNHL()
 
+__author__ = "Clayton Maxwell && Helge Wehder"
+
 
 def main():
     """
@@ -123,18 +125,12 @@ def parse_args():
         setSetting("USERNAME", args.USERNAME)
     else:
         dl.userName = getSetting("USERNAME")
-    if dl.userName == "":
-        print("Missing username, please provide username with -u")
-        exit(1)
 
     if args.PASSWORD:
         dl.passWord = args.PASSWORD
         setSetting("PASSWORD", args.PASSWORD)
     else:
         dl.passWord = getSetting("PASSWORD")
-    if dl.passWord == "":
-        print("Missing password, please provide password with -p")
-        exit(1)
 
     if args.QUALITY:
         dl.quality = str(args.QUALITY)

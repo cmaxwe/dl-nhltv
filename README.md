@@ -9,10 +9,10 @@ Download NHL.tv Streams with up to 720p60 and remove the commercial breaks
 
 ## Usage:
 ```
-usage: nhltv.py [-h] -t TEAMID [-u USERNAME] [-p PASSWORD] [-q QUALITY]
+usage: nhltv [-h] -t TEAMID [-u USERNAME] [-p PASSWORD] [-q QUALITY]
                 [-d DOWNLOAD_FOLDER] [-r] [-m]
 
-nhltv.py: Download NHL TV
+nhltv: Download NHL TV
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -34,11 +34,31 @@ optional arguments:
 ```
 
 
-# How to install
-nhltv is a python2.7 script that needs ffmpeg and aria2.
+# How to install nhltv
+
+Info: TO open a Terminal window:
+* Press Command+Space and type Terminal and press enter/return key.
+* Run in Terminal app:
+
+## Ensure to have pip installed
+Open a Terminal window and run:
+```
+sudo easy_install pip
+```
+## Install nhltv script
+ 
+In a Terminal window go to a folder of choice for the git clone and run:
+```
+git clone git@github.com:cmaxwe/dl-nhltv.git
+pip install . 
+```
+
+# How to install nhltv dependencies
+You won't be able to use it without having aria2 and ffmpeg installed
+Below are instructions on how to do install aria2c and ffmpeg.
 
 ## OS X > 10.9 
-You can install from precompiled binaries for from source 
+You can install aria2c and ffmpeg from pre-compiled binaries for from source
 
 ### From source 
 You probably want to be a developer for this. 
@@ -47,7 +67,8 @@ You probably want to be a developer for this.
 * Run in Terminal app:
 
 #### Install apples OS X command line development tools:
-* Run command below in Terminal window: 
+
+* Run command below in Terminal window:
 ```
 sudo xcode-select --install
 ```
@@ -56,7 +77,7 @@ sudo xcode-select --install
 * Wait for the command to finish.
 
 #### Install homebrew:
-* Run command below in Terminal window: 
+* Run command below in Terminal window:
 ```
 ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 ```
@@ -69,17 +90,19 @@ Note: Installation of ffmpeg will take some time as its compiled from scratch.
 Once done you should be able to run aria2 or ffmpeg in the Terminal window but you probably need to start a new Terminal.
 
 ### Install from binary:
-We are going to download dl-nhltv 
-We are going to download ffmpeg pre-build binary and put it into /usr/local/bin as root user 
-We are going to install aria2c and start a new Terminal window. 
+We are going to download dl-nhltv
+
+We are going to download ffmpeg pre-build binary and put it into /usr/local/bin as root user
+
+We are going to install aria2c and start a new Terminal window.
 
 #### Get dl-nhltv source from github:
 * Open page https://github.com/cmaxwe/dl-nhltv
 * Click “Code” tab
-* Click “Clone or Download” 
+* Click “Clone or Download”
 * Click “Download ZIP”  Open with “Archive Utility”
 * Once downloaded extract dl-nhltv-master.zip
-* Move extracted folder to a location where you want to run dl-nhltv from 
+* Move extracted folder to a location where you want to run dl-nhltv from
 
 #### Get ffmpeg binary
 * Go to http://evermeet.cx/pub/ffmpeg/
@@ -91,21 +114,21 @@ We are going to install aria2c and start a new Terminal window.
 * change into folder bin
 * drag and grop ffmpeg binary to the /usr/local/bin folder
 
-Verify by opening a new Terminal window and type in 
+Verify by opening a new Terminal window and type in
 ```
 ffmpeg -h
 ```
-You shoudl see ffmpeg short help printed
+You should see ffmpeg short help printed
 
-#### Get aria2 binary package and install it 
+#### Get aria2 binary package and install it
 * Go to http://mac.softpedia.com/get/Internet-Utilities/aria2.shtml
 * Click “DOWNLOAD” top left corner
 * Click either “External Mirror” or “Softpedia Secure Download (US)”
 * DONT CLICK ANYTHING! wait for the download !
-* In Downloads right click on the  aria2.pkg file and select “open” 
-* Click install and authenticate. 
+* In Downloads right click on the  aria2.pkg file and select “open”
+* Click install and authenticate.
 
-Verify by starting a new Terminal window and type in 
+Verify by starting a new Terminal window and type in
 ```
 aria2c -h
 ```
@@ -114,11 +137,11 @@ You should get aria2c's help printed
 
 ## On Linux
 On Linux this should be rather easy. Havent tried. Only painfull thing could be the python version.
-You need python 2.7 or higher. Might want to try 3 as some distries have 2.6 its apparently easier with python3 
+You need python 2.7 or higher. Might want to try 3 as some distries have 2.6 its apparently easier with python3
 
 ### Debian based
- 
-#### Install aria2 
+
+#### Install aria2c and ffmpeg
 ```
 sudo apt-get install aria2 ffmpeg
 ```
@@ -128,7 +151,7 @@ https://www.assetbank.co.uk/support/documentation/install/ffmpeg-debian-squeeze/
 
 
 ### Red Hat based
-note: havent tried this pure guesswork RHEL likes its python2.6 as its system version so you need to keep that. 
+note: havent tried this pure guesswork RHEL likes its python2.6 as its system version so you need to keep that.
 
 1) install aria2
 ```
@@ -138,34 +161,23 @@ For some distributions install ffmpeg follow howto of your choice like
 
 https://www.assetbank.co.uk/support/documentation/install/ffmpeg-debian-squeeze/ffmpeg-debian-jessie/
 
-## Configure dl-nhltv
-* In Finder go to your dl-nhltv-master folder 
-* Edit “globals.py”
-* Configure username and password of your NHLTV account
-USERNAME = ""
-PASSWORD = ""
-* Configure your team, see full list below TEAMID entry
-TEAMID = "17"
-* save changes and close globals.py
-
-Note: Make sure to keep the formatting and all settings surrounded by quotes. 
-OS X TextEdit is messing up the quotes by turning normal up quotes into some special up-quotes that python does not understand. On OSX You might want to use the sublime text editor instead see https://www.sublimetext.com/
+```
 
 ## Run dl-nhltv
+BEWARE ! This early version stores settings.json and temporary files in the folder you run it from!
+Temporary files can exceed 5GB on your drive you want at least 10GB free space!
+Best is to have a folder per team line to run the command in like $HOME/NHL/Detroit /$HOME/NHL/Capitals etc..
+
 * Press Command+Space and type Terminal and press enter/return key.
 * Run in Terminal app
-* type “cd” and hit space then drag and drop your dl-nhltv-master folder into the Terminal window
-* Hit enter
-* Run 
 ```
-python2.7 nhltv.py -t Detroit -u yourNhlUserName -p yourNhlPassword
+nhltv -t Detroit
 ```
-Note: your username and password gets stored in settings.json folder so you don't need to flash it on the comamnd line everyt time.
 
 # How dl-nhltv works 
-When it runs it will check the nhl.tv servers for a new game for your team and if it finds it then it will download it. Then after it downloads it will do a loop and start looking for the next game. It saves the id of the last game so if you aren't getting the results you expect then take a look at the settings.json file and set the game id manually to be lower than the gameid you want to download. It also saves the username and password in the settings.json file
+When it runs it will check the nhl.tv servers for a new game for your team and if it finds it then it will download it. Then after it downloads it will do a loop and start looking for the next game. It saves the id of the last game in settings.json in the folder you ran it from so if you aren't getting the results you expect then take a look at the settings.json file and set the game id manually to be lower than the gameid you want to download. It also saves the username and password in the settings.json file when you pass it in via -u -p. Otherwise it will ask when the cookies run old.
 
-## Files and folders
-dl-nhltv downloads the parts of a stream into a temp/ subfolder below its source code. 
+# Files and folders
+dl-nhltv downloads the parts of a stream into a temp/ subfolder below the folder you started from.
 Per game you have a different log file for the download.
 You can watch the progress of the download by looking into the temp folder.
