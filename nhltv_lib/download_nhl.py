@@ -471,13 +471,13 @@ class DownloadNHL(object):
         url = 'https://account.nhl.com/ui/rest/logout'
 
         req = urllib2.Request(url, data='', headers={
-                        "Accept": "*/*",
-                        "Accept-Encoding": "gzip, deflate",
-                        "Accept-Language": "en-US,en;q=0.8",
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Origin": "https://account.nhl.com/ui/SignOut?lang=en",
-                        "Connection": "close",
-                        "User-Agent": UA_PC})
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "en-US,en;q=0.8",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Origin": "https://account.nhl.com/ui/SignOut?lang=en",
+            "Connection": "close",
+            "User-Agent": UA_PC})
 
         try:
             response = opener.open(req)
