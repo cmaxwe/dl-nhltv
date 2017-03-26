@@ -1,6 +1,5 @@
 import re
 import subprocess
-from requests.exceptions import HTTPError
 import urllib2
 import urllib
 
@@ -14,6 +13,7 @@ from datetime import timedelta
 from datetime import datetime
 import time
 import getpass
+from urllib2 import HTTPError
 
 
 class DownloadNHL(object):
@@ -254,7 +254,7 @@ class DownloadNHL(object):
             for cookie in cj:
                 if cookie.name == "Authorization" and not cookie.is_expired():
                     authorization = cookie.value
-        except:
+        except Exception, _:
             pass
 
         return authorization
@@ -411,7 +411,7 @@ class DownloadNHL(object):
 
         try:
             cj.load(COOKIES_LWP_FILE, ignore_discard=True)
-        except:
+        except Exception, _:
             pass
 
         # Get Token
@@ -464,20 +464,20 @@ class DownloadNHL(object):
         cj = cookielib.LWPCookieJar(COOKIES_LWP_FILE)
         try:
             cj.load(COOKIES_LWP_FILE, ignore_discard=True)
-        except:
+        except Exception, _:
             pass
 
         opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cj))
         url = 'https://account.nhl.com/ui/rest/logout'
 
         req = urllib2.Request(url, data='', headers={
-                        "Accept": "*/*",
-                        "Accept-Encoding": "gzip, deflate",
-                        "Accept-Language": "en-US,en;q=0.8",
-                        "Content-Type": "application/x-www-form-urlencoded",
-                        "Origin": "https://account.nhl.com/ui/SignOut?lang=en",
-                        "Connection": "close",
-                        "User-Agent": UA_PC})
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "Accept-Language": "en-US,en;q=0.8",
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Origin": "https://account.nhl.com/ui/SignOut?lang=en",
+            "Connection": "close",
+            "User-Agent": UA_PC})
 
         try:
             response = opener.open(req)

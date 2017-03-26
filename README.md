@@ -50,7 +50,7 @@ sudo easy_install pip
 In a Terminal window go to a folder of choice for the git clone and run:
 ```
 git clone git@github.com:cmaxwe/dl-nhltv.git
-pip install . 
+sudo pip install . 
 ```
 
 # How to install nhltv dependencies
