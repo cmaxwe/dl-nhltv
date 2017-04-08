@@ -1,11 +1,10 @@
-from nhltv_lib.silenceskip import silenceSkip
 from nhltv_lib.download_nhl import DownloadNHL
-from nhltv_lib.common import tprint, saveCookiesAsText, getSetting, which
+from nhltv_lib.common import tprint, getSetting, which, wait, saveCookiesAsText
 from nhltv_lib.common import setSetting, createMandatoryFiles
 import argparse
-from nhltv_lib.video import reEncode
 from nhltv_lib.teams import Teams
-import time
+from nhltv_lib.silenceskip import silenceSkip
+from nhltv_lib.video import reEncode
 MOBILE_VIDEO = False
 RETRY_ERRORED_DOWNLOADS = False
 DOWNLOAD_FOLDER = ""
@@ -22,24 +21,35 @@ def main():
 
     createMandatoryFiles()
     gameID = None
-    while True:
-        gameID, contentID, eventID = dl.getGameId()
-        if gameID is not None:
-            break
-        # If there is no game in the file wait a day
-        tprint("No game in latest json. Waiting a day.")
-        waitTime = 86400
-        time.sleep(waitTime)
+    waitTimeInMin = 60
+    while (gameID is None) or (waitTimeInMin > 0):
+        try:
+            gameID, contentID, eventID, waitTimeInMin = dl.getGameId()
+        except dl.NoGameFound:
+            wait(reason="No new game.", minutes=24 * 60)
+            continue
+
+        except dl.GameStartedButNotAvailableYet:
+            wait(reason="Game has started but isn't available yet", minutes=10)
+            continue
+
+        if waitTimeInMin > 0:
+            wait(reason="Game hasn't started yet.", minutes=waitTimeInMin)
+            continue
+
+        if gameID is None:
+            wait(reason="Did not find a gameID.", minutes=waitTimeInMin)
 
     # When one is found then fetch the stream and save the cookies for it
     tprint('Fetching the stream URL')
-    stream_url, _, game_info = dl.fetchStream(gameID, contentID, eventID)
-    saveCookiesAsText()
+    while True:
+        try:
+            stream_url, _, game_info = dl.fetchStream(gameID, contentID, eventID)
+            break
+        except dl.BlackoutRestriction:
+            wait(reason="Game is effected by NHL Game Center blackout restrictions.", minutes=12 * 60)
 
-    # Wait 15 minutes for it to propagate
-    # waitTime = 60 * 20
-    # tprint("Game ready! Waiting for " + str(waitTime/60) + ' minutes for it to finish propagating.')
-    # time.sleep(waitTime)
+    saveCookiesAsText()
 
     tprint("Downloading stream_url")
     outputFile = str(gameID) + '_raw.mkv'
@@ -139,13 +149,13 @@ def parse_args():
         setSetting("DOWNLOAD_FOLDER", DOWNLOAD_FOLDER)
     else:
         DOWNLOAD_FOLDER = getSetting("DOWNLOAD_FOLDER")
+        tprint("DOWNLOAD_FOLDER got set to " + DOWNLOAD_FOLDER)
 
     if args.RETRY_ERRORED_DOWNLOADS:
         RETRY_ERRORED_DOWNLOADS = args.RETRY_ERRORED_DOWNLOADS
     if args.MOBILE_VIDEO:
         MOBILE_VIDEO = args.MOBILE_VIDEO
 
-    print "parse_args: DOWNLOAD_FOLDER = " + DOWNLOAD_FOLDER
     while(True):
         main()
 
