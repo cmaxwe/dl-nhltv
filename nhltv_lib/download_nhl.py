@@ -4,7 +4,7 @@ import urllib2
 import urllib
 
 from nhltv_lib.common import tprint, COOKIES_TXT_FILE, MASTER_FILE_TYPE,\
-    COOKIES_LWP_FILE, UA_NHL, setSetting, getSetting, UA_PC, UA_PS4
+    COOKIES_LWP_FILE, UA_NHL, setSetting, getSetting, UA_PC, UA_PS4, wait
 import os
 import cookielib
 import json
@@ -16,12 +16,30 @@ import getpass
 from urllib2 import HTTPError
 
 
+class BlackoutRestriction(Exception):
+    """Tried to download Blackout Restricted game! """
+    pass
+
+
+class NoGameFound(Exception):
+    """When checking for the next game we could not find one """
+    pass
+
+
+class GameStartedButNotAvailableYet(Exception):
+    """When checking for the next game we found one but is not available for download yet """
+    pass
+
+
 class DownloadNHL(object):
     quality = "5000"
     retry_errored_downloads = False
     userName = ""
     passWord = ""
     teamID = 0
+    BlackoutRestriction = BlackoutRestriction
+    NoGameFound = NoGameFound
+    GameStartedButNotAvailableYet = GameStartedButNotAvailableYet
 
     def remove_lines_without_errors(self, errors):
         # Open download file
@@ -70,8 +88,7 @@ class DownloadNHL(object):
             if(len(errors) > 0):
                 tprint('Found ' + str(len(errors)) + ' download errors.')
                 if(lastErrorCount == len(errors)):
-                    tprint('Same number of errrors as last time so waiting 10 minutes')
-                    time.sleep(60 * 10)
+                    wait(reason="Same number of errrors as last time so waiting 10 minutes", minutes=10)
                 self.remove_lines_without_errors(errors)
 
                 tprint('Trying to download the erroneous files again...')
@@ -282,11 +299,6 @@ class DownloadNHL(object):
         if session_key == '':
             return stream_url, media_auth, ""
 
-        if "blackout" in session_key:
-            msg = "The game you are trying to access is not currently available due to local or national blackout restrictions.\n Full game archives will be available 48 hours after completion of this game."
-            tprint(msg)
-            return stream_url, media_auth, ""
-
         # Org
         url = 'https://mf.svc.nhl.com/ws/media/mf/v2.4/stream?contentId='
         url += str(content_id) + '&playbackScenario=HTTP_CLOUD_TABLET_60&platform=IPAD&sessionKey='
@@ -318,9 +330,7 @@ class DownloadNHL(object):
             if json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['blackout_status']['status'] == 'BlackedOutStatus':
                 msg = "You do not have access to view this content. To watch live games and learn more about blackout restrictions, please visit NHL.TV"
                 tprint(msg)
-                # TODO: go into wait loop here. For now we exit gracefully
-                exit(1)
-                # return stream_url, media_auth, ""
+                raise self.BlackoutRestriction
 
         stream_url = json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']
         media_auth = str(json_source['session_info']['sessionAttributes'][0]['attributeName']) + "=" + str(json_source['session_info']['sessionAttributes'][0]['attributeValue'])
@@ -527,7 +537,7 @@ class DownloadNHL(object):
                     if(awayTeamId == self.teamID):
                         favTeamHomeAway = 'AWAY'
                     return (jg, favTeamHomeAway)
-        return None, None
+        raise self.NoGameFound
 
     def getGameId(self):
         current_time = datetime.now()
@@ -537,10 +547,6 @@ class DownloadNHL(object):
 
         # Go through all games in the file and look for the next game
         gameToGet, favTeamHomeAway = self.lookForTheNextGameToGet(json_source)
-
-        # If there is a game to get then find the best feed
-        if gameToGet is None:
-            return None, None, None
 
         bestScore = -1
         bestEpg = None
@@ -565,22 +571,19 @@ class DownloadNHL(object):
             contentID = str(bestEpg['mediaPlaybackId'])
             eventID = str(bestEpg['eventId'])
             tprint("Found a game: " + str(gameID))
-            return gameID, contentID, eventID
+            waitTimeInMin = 0
+            return gameID, contentID, eventID, waitTimeInMin
 
         # If it is not then figure out how long to wait and wait
         # If the game hasn't started then wait until 3 hours after the game has started
         startDateTime = datetime.strptime(gameToGet['gameDate'], '%Y-%m-%dT%H:%M:%SZ')
         if(startDateTime > datetime.utcnow()):
             waitUntil = startDateTime + timedelta(minutes=150)
-            waitTime = (waitUntil - datetime.utcnow()).total_seconds()
-            tprint("Game hasn't started yet. Waiting for " + str(waitTime / 60) + ' minutes.')
-            time.sleep(waitTime)
-            return None, None, None
-        # If game has started but isn't available yet then wait for 15 minutes
-        waitTime = 10 * 60
-        tprint("Game has started but isn't available yet. Waiting for " + str(waitTime / 60) + ' minutes.')
-        time.sleep(waitTime)
-        return None, None, None
+            waitTimeInMin = ((waitUntil - datetime.utcnow()).total_seconds()) / 60
+            tprint("Game scheduled for " + gameToGet['gameDate'] + " hasn't started yet")
+            return None, None, None, waitTimeInMin
+
+        raise(self.NoGameFound)
 
     def downloadStream(self, stream_url, outputFile):
         tprint('Downloading the stream...')

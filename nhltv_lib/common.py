@@ -3,6 +3,7 @@ import cookielib
 from datetime import datetime
 import os
 import subprocess
+import time
 
 MASTER_FILE_TYPE = 'master_tablet60.m3u8'
 SETTINGS_FILE = 'settings.json'
@@ -105,3 +106,67 @@ def which(program):
     if returnCode == 0:
             return True
     return False
+
+
+def formatWaitTimeString(minutes):
+    """
+    Formats  minutes in int to a human readable string
+    """
+    minutes = float(int(minutes))
+    if minutes >= 60 * 24:
+        unit = "day"
+        if minutes > 60 * 24:
+            unit += "s"
+        waitTime = minutes / 60 / 24
+    elif minutes >= 60:
+        unit = "hour"
+        if minutes >= 120:
+            unit += "s"
+        waitTime = minutes / 60
+    else:
+        unit = "minute"
+        if minutes >= 2:
+            unit += "s"
+        waitTime = minutes
+    return str(int(waitTime)) + " " + unit
+
+
+def wait(minutes=0, reason=""):
+    """
+    Wait for minutes by comparing elapsed epoch time instead of sleep.
+    So if the computer wakes up from sleep or suspend we don't wait longer.
+    We also let the user know that we noticed the time jump.
+    """
+
+    tprint(reason + " Waiting for " + formatWaitTimeString(minutes))
+
+    # Find out destination time
+    epochTo = time.time() + minutes * 60.0
+
+    # Time to sleep in between checking
+    sleepTime = 10.0
+
+    # Storing current time so that we can figure out if there was a time jump
+    epochBeforeSleep = time.time()
+
+    while(epochTo > epochBeforeSleep):
+        time.sleep(sleepTime)
+
+        # Check if we had a time jump
+        epochNow = time.time()
+        timeDelta = epochNow - epochBeforeSleep - sleepTime
+
+        # for debugging:
+#         tprint("epochNow=" + formatWaitTimeString(epochNow / 60) + " " + "time delta=" + formatWaitTimeString(timeDelta / 60))
+
+        # When a time jump is bigger than the sleep time
+        # we know we where sleeping and need to re-evaluate the situation.
+        if (timeDelta > sleepTime):
+            # if we where sleeping longer then we had to wait
+            if epochNow > epochTo:
+                return
+
+            # still time left to wait
+            remainingMin = (epochTo - epochNow) / 60
+            tprint("Remaining waiting time " + formatWaitTimeString(remainingMin))
+        epochBeforeSleep = time.time()
