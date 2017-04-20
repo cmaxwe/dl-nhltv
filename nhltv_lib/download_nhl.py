@@ -502,6 +502,9 @@ class DownloadNHL(object):
             setSetting(sid='session_key', value='')
 
     def checkForNewGame(self, startDate="YYYY-MM-DD", endDate="YYYY-MM-DD"):
+        """
+        Fetches game schedule between two dates and returns it as a json source
+        """
         tprint('Checking for new game between ' + startDate + " and " + endDate)
         url = 'http://statsapi.web.nhl.com/api/v1/schedule?expand=schedule.teams,schedule.linescore,schedule.scoringplays,schedule.game.content.media.epg&startDate='
         url += startDate + '&endDate=' + endDate + '&site=en_nhl&platform=playstation'
@@ -528,11 +531,15 @@ class DownloadNHL(object):
         """
         favTeamHomeAway = 'HOME'
         lastGame = getSetting('lastGameID')
+
         for jd in json_source['dates']:
             for jg in jd['games']:
                 homeTeamId = int(jg['teams']['home']['team']["id"])
                 awayTeamId = int(jg['teams']['away']['team']["id"])
                 gameID = jg['gamePk']
+
+                # Print out for debugging
+#                 print("DownloadNHL.lookForTheNextGameToGet: self.teamID=" + str(self.teamID) + " homeTeamId=" + str(homeTeamId) + " awayTeamId=" + str(awayTeamId) + " gameID=" + str(gameID) + " lastGame=" + str(lastGame))
                 if((homeTeamId == self.teamID or awayTeamId == self.teamID) and gameID > lastGame):
                     if(awayTeamId == self.teamID):
                         favTeamHomeAway = 'AWAY'
