@@ -548,7 +548,7 @@ class DownloadNHL(object):
 
     def getGameId(self):
         current_time = datetime.now()
-        startDate = (current_time.date() - timedelta(days=3)).isoformat()
+        startDate = (current_time.date() - timedelta(days=4)).isoformat()
         endDate = current_time.date().isoformat()
         json_source = self.checkForNewGame(startDate, endDate)
 
