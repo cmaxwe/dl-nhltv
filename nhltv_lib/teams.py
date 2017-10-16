@@ -1,6 +1,6 @@
 import urllib2
 import xml.etree.ElementTree as ET
-
+import json
 
 class Team(object):
     fullName = "Detroit Red Wings"
@@ -27,7 +27,7 @@ class Teams(object):
     team = Team()
     teams = {}
     user_agent = 'PS4Application libhttp/1.000 (PS4) libhttp/3.15 (PlayStation 4)'
-    url = 'http://app.cgy.nhl.yinzcam.com/V2/Stats/Standings'
+    url = 'https://statsapi.web.nhl.com/api/v1/teams?'
 
     def getTeam(self, search):
         """
@@ -58,21 +58,26 @@ class Teams(object):
         req = urllib2.Request(self.url)
         req.add_header('Connection', 'close')
         req.add_header('User-Agent', self.user_agent)
-        response = urllib2.urlopen(req)
-        xml = response.read().decode('utf-8-sig')
-        self._parseGameContentSchedule(ET.fromstring(xml))
+        try: 
+            response = urllib2.urlopen(req)
+        except urllib2.HTTPError as err:
+            raise LookupError('ERROR ' + str(err.code) + ' %s' % self.url)
+        data = json.load(response)
+        self._parseGameContentSchedule(data)
         response.close()
 
     def _parseTeam(self, team):
         t = Team()
-        t.fullName = team["Team"]
-        t.id = int(team["Id"])
-        t.abbreviation = team["TriCode"]
+        teamName = team["name"]
+        # replace French letters with English (Montreal Canadiens):
+        t.fullName = teamName.encode("utf8").replace("\xc3\xa9", "e")
+        t.id = int(str(team["id"]))
+        t.abbreviation = str(team["abbreviation"])
         self.teams[t.abbreviation] = t
 
-    def _parseGameContentSchedule(self, tree):
-        for item in tree.iter("Standing"):
-            self._parseTeam(item.attrib)
+    def _parseGameContentSchedule(self, data):
+        for team in data["teams"]:
+            self._parseTeam(team)
 
     def _searchTeamByAbbreviation(self, search=str):
         return self.teams[search]
