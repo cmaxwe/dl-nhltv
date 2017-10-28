@@ -23,7 +23,7 @@ optional arguments:
   -p PASSWORD, --password PASSWORD
                         Password of your NHL TV account
   -q QUALITY, --quality QUALITY
-                        is highest by default you can set it to 5000, 3500,
+                        is highest by default you can set it to 5600, 3500,
                         2500, 1800, 1200, 800, 450
   -d DOWNLOAD_FOLDER, --download_folder DOWNLOAD_FOLDER
                         Output folder where you want to store your final file
