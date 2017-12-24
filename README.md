@@ -49,7 +49,7 @@ sudo easy_install pip
  
 In a Terminal window go to a folder of choice for the git clone and run:
 ```
-git clone git@github.com:cmaxwe/dl-nhltv.git
+git clone https://github.com/cmaxwe/dl-nhltv.git
 sudo pip install . 
 ```
 
