@@ -33,13 +33,14 @@ def find(source, start_str, end_str):
     return ''
 
 
-def getSetting(sid):
+def getSetting(sid, tid):
+    TEAMSETTINGS_FILE = SETTINGS_FILE + "." + str(tid)
     # Ensure file exists
-    if not os.path.isfile(SETTINGS_FILE):
-        createSettingsFile(SETTINGS_FILE)
+    if not os.path.isfile(TEAMSETTINGS_FILE):
+        createSettingsFile(TEAMSETTINGS_FILE)
 
     # Load the settings file
-    with open(SETTINGS_FILE, "r") as settingsFile:
+    with open(TEAMSETTINGS_FILE, "r") as settingsFile:
         j = json.load(settingsFile)
     settingsFile.close()
     if sid in j:
@@ -47,19 +48,20 @@ def getSetting(sid):
     return('')
 
 
-def setSetting(sid, value):
+def setSetting(sid, value, tid):
+    TEAMSETTINGS_FILE = SETTINGS_FILE + "." + str(tid)
     # Ensure file exists
-    if not os.path.isfile(SETTINGS_FILE):
-        createSettingsFile(SETTINGS_FILE)
+    if not os.path.isfile(TEAMSETTINGS_FILE):
+        createSettingsFile(TEAMSETTINGS_FILE)
 
     # Write to settings file
-    with open(SETTINGS_FILE, "r") as settingsFile:
+    with open(TEAMSETTINGS_FILE, "r") as settingsFile:
         j = json.load(settingsFile)
 
     settingsFile.close()
     j[sid] = value
 
-    with open(SETTINGS_FILE, "w") as settingsFile:
+    with open(TEAMSETTINGS_FILE, "w") as settingsFile:
         json.dump(j, settingsFile, indent=4)
 
     settingsFile.close()

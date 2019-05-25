@@ -335,10 +335,10 @@ class DownloadNHL(object):
         stream_url = json_source['user_verified_event'][0]['user_verified_content'][0]['user_verified_media_item'][0]['url']
         media_auth = str(json_source['session_info']['sessionAttributes'][0]['attributeName']) + "=" + str(json_source['session_info']['sessionAttributes'][0]['attributeValue'])
         session_key = json_source['session_key']
-        setSetting(sid='media_auth', value=media_auth)
+        setSetting(sid='media_auth', value=media_auth, tid=self.teamID)
 
         # Update Session Key
-        setSetting(sid='session_key', value=session_key)
+        setSetting(sid='session_key', value=session_key, tid=self.teamID)
 
         # Add media_auth cookie
         ck = cookielib.Cookie(version=0, name='mediaAuth', value="" + media_auth.replace('mediaAuth=', '') + "", port=None, port_specified=False, domain='.nhl.com', domain_specified=True, domain_initial_dot=True, path='/', path_specified=True, secure=False, expires=(int(time.time()) + 7500), discard=False, comment=None, comment_url=None, rest={}, rfc2109=False)
@@ -367,7 +367,7 @@ class DownloadNHL(object):
         return game_time + "_" + game_teams
 
     def getSessionKey(self, game_id, event_id, content_id, authorization):
-        session_key = str(getSetting(sid="session_key"))
+        session_key = str(getSetting(sid="session_key", tid=self.teamID))
 
         if session_key == '':
             tprint("need to fetch new session key")
@@ -405,7 +405,7 @@ class DownloadNHL(object):
                     tprint(msg)
                     return 'blackout'
             session_key = str(json_source['session_key'])
-            setSetting(sid='session_key', value=session_key)
+            setSetting(sid='session_key', value=session_key, tid=self.teamID)
 
         return session_key
 
@@ -499,7 +499,7 @@ class DownloadNHL(object):
         response.close()
 
         if display_msg == 'true':
-            setSetting(sid='session_key', value='')
+            setSetting(sid='session_key', value='', tid=self.teamID)
 
     def checkForNewGame(self, startDate="YYYY-MM-DD", endDate="YYYY-MM-DD"):
         """
@@ -530,7 +530,7 @@ class DownloadNHL(object):
 
         """
         favTeamHomeAway = 'HOME'
-        lastGame = getSetting('lastGameID')
+        lastGame = getSetting('lastGameID', self.teamID)
 
         for jd in json_source['dates']:
             for jg in jd['games']:

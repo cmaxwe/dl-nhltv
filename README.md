@@ -10,27 +10,35 @@ Download NHL.tv Streams with up to 720p60 and remove the commercial breaks
 ## Usage:
 ```
 usage: nhltv [-h] -t TEAMID [-u USERNAME] [-p PASSWORD] [-q QUALITY]
-                [-d DOWNLOAD_FOLDER] [-r] [-m]
+             [-d DOWNLOAD_FOLDER] [-i CHECKINTERVAL] [-r] [-m]
+             [-k RETENTIONDAYS]
 
 nhltv: Download NHL TV
 
 optional arguments:
   -h, --help            show this help message and exit
-  -t TEAMID, --team TEAMID
-                        Team ID i.e. 17 or DET or Detroit
+  -t TEAMID, --team TEAMID, --append-action TEAMID
+                        Team ID i.e. 17 or DET or Detroit, can be used
+                        multiple times
   -u USERNAME, --username USERNAME
                         User name of your NHLTV account
   -p PASSWORD, --password PASSWORD
                         Password of your NHL TV account
   -q QUALITY, --quality QUALITY
-                        is highest by default you can set it to 5600, 3500,
-                        2500, 1800, 1200, 800, 450
+                        is highest by default you can set it to 5000, 3500,
+                        1500, 900
   -d DOWNLOAD_FOLDER, --download_folder DOWNLOAD_FOLDER
                         Output folder where you want to store your final file
                         like $HOME/Desktop/NHL/
+  -i CHECKINTERVAL, --checkinterval CHECKINTERVAL
+                        Specify checkinterval in hours to look for new games,
+                        default is 4
   -r, --retry           Usually works fine without, Use this flag if you want
                         it perfect
   -m, --mobile_video    Set this to also encode video for mobile devices
+  -k RETENTIONDAYS, --keep RETENTIONDAYS
+                        Specify how many days videos and download logs are
+                        kept, default is forever
 ```
 
 
@@ -161,7 +169,8 @@ For some distributions install ffmpeg follow howto of your choice like
 
 https://www.assetbank.co.uk/support/documentation/install/ffmpeg-debian-squeeze/ffmpeg-debian-jessie/
 
-
+### Docker
+If you want to build a docker image have a look at the docker file and docker compose examples. The docker compose example is made for docker swarm, so you have to modify it for a single docker installation.
 
 ## Run dl-nhltv
 BEWARE ! This early version stores settings.json and temporary files in the folder you run it from!
