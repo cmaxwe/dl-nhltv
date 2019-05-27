@@ -68,7 +68,7 @@ def main():
 
             # Remove silence
             tprint("Removing silence...")
-            newFileName = DOWNLOAD_FOLDER + '/' + game_info + "_" + str(gameID) + "_" + str(TEAMID.abbreviation) + '.mkv'
+            newFileName = DOWNLOAD_FOLDER + '/' + str(TEAMID.abbreviation) "_" + game_info + "_" + str(gameID) + '.mkv'
             silenceSkip(outputFile, newFileName)
 
             if MOBILE_VIDEO is True:
